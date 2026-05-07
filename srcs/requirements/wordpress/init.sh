@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+echo "WordPress: Waiting MariaDB..."
+while ! mysqladmin --user=$SQL_USER  --password=$SQL_PASSWORD -P 4306 --host=mariadb ping --silent; do
+    sleep 2
+done
+
 mkdir -p /run/php
 mkdir -p /var/www/html
 
@@ -18,13 +23,8 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 		--dbname="${SQL_DATABASE}" \
 		--dbuser="${SQL_USER}" \
 		--dbpass="${SQL_PASSWORD}" \
-		--dbhost="${SQL_HOST}:3306"
+		--dbhost="${SQL_HOST}:4306"
 fi
-
-echo "Waiting for MariaDB..."
-until mysqladmin ping -h"${SQL_HOST}" -u"${SQL_USER}" -p"${SQL_PASSWORD}" --silent; do
-	sleep 2
-done
 
 if ! wp core is-installed --allow-root; then
 	echo "Installing WordPress..."

@@ -11,7 +11,7 @@ services:
       - inception
     restart: always
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-P", "4306", "--silent"]
       interval: 5s
       retries: 5
 
